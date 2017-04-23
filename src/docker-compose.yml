@@ -1,0 +1,33 @@
+version: "2"
+
+services:
+
+  traefik:
+    image: ${TRAEFIK_IMAGE}
+    container_name: ${TRAEFIK_CONTAINER_NAME}
+    command: ${TRAEFIK_COMMAND}
+    ports:
+      - ${TRAEFIK_HTTP_PORT_MAP}
+      - ${TRAEFIK_HTTPS_PORT_MAP}
+      - ${TRAEFIK_DASHBOARD_PORT_MAP}
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/null:/traefik.toml
+
+
+########################################################################################################################
+# NETWORKS
+########################################################################################################################
+#
+# Attach all services to the traefik_network so that we can run several containers in same host,
+#  without port numbers in the Url.
+#
+# @link https://traefik.io
+#
+####
+
+networks:
+  default:
+    external:
+      name: ${TRAEFIK_LISTEN_DOCKER_NETWORK}
